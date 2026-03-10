@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animasi Jalan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+    background: #1a1a2e;
+  }
+
+  /* SLIDE CONTAINER */
+  .slides {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .slide.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+  }
+
+  /* ===== SLIDE 1 ===== */
+  #slide1 {
+    background: linear-gradient(180deg, #87CEEB 0%, #b0e0f5 55%, #a8d5a2 55%, #7bc47a 70%, #5a9e5a 100%);
+  }
+
+  /* SUN */
+  .sun {
+    position: absolute;
+    top: 40px;
+    right: 120px;
+    width: 80px;
+    height: 80px;
+    background: #FFD700;
+    border-radius: 50%;
+    box-shadow: 0 0 40px #FFD70088;
+    animation: sunPulse 3s ease-in-out infinite;
+  }
+  @keyframes sunPulse {
+    0%,100% { box-shadow: 0 0 40px #FFD70088; }
+    50% { box-shadow: 0 0 70px #FFD700cc; }
+  }
+
+  /* CLOUDS */
+  .cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.9;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+  }
+  .cloud1 { width: 100px; height: 35px; top: 80px; left: -120px; animation: cloudMove 18s linear infinite; }
+  .cloud1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
+  .cloud1::after { width: 35px; height: 35px; top: -15px; left: 45px; }
+  .cloud2 { width: 80px; height: 28px; top: 140px; left: -100px; animation: cloudMove 25s linear infinite 5s; opacity: 0.7; }
+  .cloud2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
+  .cloud2::after { width: 30px; height: 30px; top: -12px; left: 38px; }
+
+  @keyframes cloudMove {
+    from { left: -150px; }
+    to { left: 110%; }
+  }
+
+  /* ROAD */
+  .road {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    background: #555;
+  }
+  .road-line {
+    position: absolute;
+    top: 50%;
+    width: 60px; height: 8px;
+    background: #FFD700;
+    border-radius: 4px;
+    animation: roadMove 1.2s linear infinite;
+  }
+  .road-line:nth-child(1) { left: 0%; animation-delay: 0s; }
+  .road-line:nth-child(2) { left: 20%; animation-delay: -0.24s; }
+  .road-line:nth-child(3) { left: 40%; animation-delay: -0.48s; }
+  .road-line:nth-child(4) { left: 60%; animation-delay: -0.72s; }
+  .road-line:nth-child(5) { left: 80%; animation-delay: -0.96s; }
+  @keyframes roadMove {
+    from { transform: translateX(0); }
+    to { transform: translateX(-150px); }
+  }
+
+  /* SIDEWALK */
+  .sidewalk {
+    position: absolute;
+    bottom: 120px;
+    width: 100%;
+    height: 50px;
+    background: #bbb;
+    border-top: 4px solid #999;
+  }
+
+  /* GRASS */
+  .grass {
+    position: absolute;
+    bottom: 170px;
+    width: 100%;
+    height: 40px;
+    background: #5a9e5a;
+  }
+
+  /* TREES */
+  .tree {
+    position: absolute;
+    bottom: 170px;
+  }
+  .tree-trunk {
+    width: 18px; height: 50px;
+    background: #8B4513;
+    margin: 0 auto;
+    border-radius: 4px;
+  }
+  .tree-top {
+    width: 60px; height: 70px;
+    background: #2d7a2d;
+    border-radius: 50% 50% 40% 40%;
+    margin: 0 auto;
+    position: relative;
+    top: 10px;
+  }
+
+  .tree1 { left: 15%; }
+  .tree2 { left: 55%; }
+  .tree3 { right: 10%; }
+
+  /* WALKERS */
+  .walker-wrap {
+    position: absolute;
+    bottom: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Person CSS art */
+  .person {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .head {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    margin-bottom: 2px;
+    position: relative;
+  }
+  .head::before {
+    content: '😊';
+    font-size: 22px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .body {
+    width: 20px; height: 36px;
+    border-radius: 4px;
+    position: relative;
+  }
+
+  /* Arms */
+  .arm-l, .arm-r {
+    width: 8px; height: 28px;
+    border-radius: 4px;
+    position: absolute;
+    top: 2px;
+  }
+  .arm-l { left: -10px; transform-origin: top center; animation: armSwingL 0.5s ease-in-out infinite alternate; }
+  .arm-r { right: -10px; transform-origin: top center; animation: armSwingR 0.5s ease-in-out infinite alternate; }
+
+  @keyframes armSwingL {
+    from { transform: rotate(-30deg); }
+    to { transform: rotate(30deg); }
+  }
+  @keyframes armSwingR {
+    from { transform: rotate(30deg); }
+    to { transform: rotate(-30deg); }
+  }
+
+  /* Legs */
+  .legs {
+    display: flex;
+    gap: 4px;
+  }
+  .leg-l, .leg-r {
+    width: 8px; height: 30px;
+    border-radius: 4px;
+    transform-origin: top center;
+  }
+  .leg-l { animation: legSwingL 0.5s ease-in-out infinite alternate; }
+  .leg-r { animation: legSwingR 0.5s ease-in-out infinite alternate; }
+
+  @keyframes legSwingL {
+    from { transform: rotate(-25deg); }
+    to { transform: rotate(25deg); }
+  }
+  @keyframes legSwingR {
+    from { transform: rotate(25deg); }
+    to { transform: rotate(-25deg); }
+  }
+
+  /* Person 1 (front) - warna biru */
+  .person1 .head { background: #FFD700; }
+  .person1 .body { background: #3498db; }
+  .person1 .arm-l, .person1 .arm-r { background: #2980b9; }
+  .person1 .leg-l, .person1 .leg-r { background: #1a252f; }
+
+  /* Person 2 (behind/back) - warna merah */
+  .person2 .head { background: #FFD700; }
+  .person2 .body { background: #e74c3c; }
+  .person2 .arm-l, .person2 .arm-r { background: #c0392b; }
+  .person2 .leg-l, .person2 .leg-r { background: #1a252f; }
+
+  /* Walking animation - move across screen */
+  .walker1 {
+    animation: walk1 5s linear infinite;
+    z-index: 10;
+  }
+  .walker2 {
+    animation: walk2 5s linear infinite;
+    z-index: 9;
+  }
+
+  @keyframes walk1 {
+    from { left: -80px; }
+    to { left: 110%; }
+  }
+  @keyframes walk2 {
+    from { left: -160px; }
+    to { left: calc(110% - 80px); }
+  }
+
+  /* HELLO text floating above person 2 */
+  .hello-text {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFD700;
+    color: #1a1a2e;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    animation: helloBounce 0.6s ease-in-out infinite alternate;
+    margin-bottom: 6px;
+  }
+  .hello-text::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #FFD700;
+  }
+  @keyframes helloBounce {
+    from { transform: translateX(-50%) translateY(0px); }
+    to { transform: translateX(-50%) translateY(-6px); }
+  }
+
+  /* SLIDE 1 TITLE */
+  .slide1-title {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(28px, 5vw, 48px);
+    color: #1a1a2e;
+    text-shadow: 2px 2px 0 #FFD700, 4px 4px 0 rgba(0,0,0,0.15);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* ===== SLIDE 2 ===== */
+  #slide2 {
+    background: linear-gradient(180deg, #fff9e6 0%, #ffe4a0 40%, #a8d5a2 40%, #6bbf6b 60%, #4a9e4a 100%);
+  }
+
+  .kid-scene {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  /* BIG SUN S2 */
+  .sun2 {
+    position: absolute;
+    top: 30px; left: 80px;
+    width: 100px; height: 100px;
+    background: #FFD700;
+    border-radius: 50%;
+    box-shadow: 0 0 60px #FFD700aa;
+    animation: sunPulse 2.5s ease-in-out infinite;
+  }
+  .sun-ray {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 140px; height: 4px;
+    background: #FFD70088;
+    border-radius: 2px;
+    transform-origin: left center;
+  }
+
+  /* HOUSE */
+  .house {
+    position: absolute;
+    right: 10%;
+    bottom: 38%;
+  }
+  .house-body {
+    width: 130px; height: 100px;
+    background: #e8c49a;
+    border: 3px solid #c9a87a;
+    border-radius: 4px;
+    position: relative;
+  }
+  .house-roof {
+    position: absolute;
+    top: -55px; left: -15px;
+    width: 0; height: 0;
+    border-left: 80px solid transparent;
+    border-right: 80px solid transparent;
+    border-bottom: 60px solid #e74c3c;
+  }
+  .house-door {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 35px; height: 55px;
+    background: #8B4513;
+    border-radius: 4px 4px 0 0;
+  }
+  .house-window {
+    position: absolute;
+    top: 20px;
+    width: 30px; height: 30px;
+    background: #87CEEB;
+    border: 3px solid #aaa;
+    border-radius: 2px;
+  }
+  .house-window.left { left: 15px; }
+  .house-window.right { right: 15px; }
+
+  /* KID */
+  .kid-wrap {
+    position: absolute;
+    bottom: 38%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: kidBounce 0.8s ease-in-out infinite alternate;
+  }
+  @keyframes kidBounce {
+    from { transform: translateX(-50%) translateY(0px); }
+    to { transform: translateX(-50%) translateY(-8px); }
+  }
+
+  .kid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .kid-head {
+    width: 50px; height: 50px;
+    background: #FFD700;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+  }
+  .kid-head::before {
+    content: '😄';
+    font-size: 38px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /* Kid hair */
+  .kid-hair {
+    position: absolute;
+    top: -5px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+    color: #8B4513;
+  }
+  .kid-body {
+    width: 36px; height: 50px;
+    background: #e74c3c;
+    border-radius: 6px;
+    position: relative;
+    margin-top: 2px;
+  }
+  .kid-arm-l, .kid-arm-r {
+    position: absolute;
+    width: 12px; height: 36px;
+    background: #c0392b;
+    border-radius: 6px;
+    top: 4px;
+  }
+  .kid-arm-l {
+    left: -13px;
+    animation: kidArmL 0.4s ease-in-out infinite alternate;
+    transform-origin: top center;
+  }
+  .kid-arm-r {
+    right: -13px;
+    animation: kidArmR 0.4s ease-in-out infinite alternate;
+    transform-origin: top center;
+  }
+  @keyframes kidArmL {
+    from { transform: rotate(-40deg); }
+    to { transform: rotate(10deg); }
+  }
+  @keyframes kidArmR {
+    from { transform: rotate(10deg); }
+    to { transform: rotate(-40deg); }
+  }
+  .kid-legs {
+    display: flex;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .kid-leg-l, .kid-leg-r {
+    width: 12px; height: 38px;
+    background: #2c3e50;
+    border-radius: 6px;
+  }
+  .kid-leg-l {
+    animation: kidLegL 0.4s ease-in-out infinite alternate;
+    transform-origin: top center;
+  }
+  .kid-leg-r {
+    animation: kidLegR 0.4s ease-in-out infinite alternate;
+    transform-origin: top center;
+  }
+  @keyframes kidLegL {
+    from { transform: rotate(-20deg); }
+    to { transform: rotate(20deg); }
+  }
+  @keyframes kidLegR {
+    from { transform: rotate(20deg); }
+    to { transform: rotate(-20deg); }
+  }
+  /* kid shoes */
+  .kid-shoe-l, .kid-shoe-r {
+    width: 18px; height: 10px;
+    background: #e74c3c;
+    border-radius: 4px;
+    margin-top: -4px;
+  }
+
+  /* BALLOON */
+  .balloon-wrap {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: balloonSway 2s ease-in-out infinite alternate;
+  }
+  @keyframes balloonSway {
+    from { transform: translateX(-50%) rotate(-8deg); }
+    to { transform: translateX(-50%) rotate(8deg); }
+  }
+  .balloon {
+    width: 50px; height: 60px;
+    background: radial-gradient(circle at 35% 30%, #ff6b6b, #e74c3c);
+    border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
+    position: relative;
+  }
+  .balloon::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background: #aaa;
+  }
+
+  /* FLOWERS */
+  .flower {
+    position: absolute;
+    font-size: 24px;
+  }
+  .f1 { bottom: 38%; left: 20%; animation: flowerSway 2.5s ease-in-out infinite alternate; }
+  .f2 { bottom: 38%; left: 35%; animation: flowerSway 3s ease-in-out infinite alternate 0.5s; }
+  .f3 { bottom: 38%; right: 25%; animation: flowerSway 2s ease-in-out infinite alternate 1s; }
+  @keyframes flowerSway {
+    from { transform: rotate(-10deg); }
+    to { transform: rotate(10deg); }
+  }
+
+  /* BUTTERFLY */
+  .butterfly {
+    position: absolute;
+    top: 40%;
+    left: 30%;
+    font-size: 28px;
+    animation: butterflyFly 5s ease-in-out infinite;
+  }
+  @keyframes butterflyFly {
+    0% { left: 20%; top: 40%; }
+    25% { left: 40%; top: 30%; }
+    50% { left: 60%; top: 45%; }
+    75% { left: 45%; top: 35%; }
+    100% { left: 20%; top: 40%; }
+  }
+
+  /* SLIDE 2 TITLE */
+  .slide2-title {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(28px, 5vw, 48px);
+    color: #e74c3c;
+    text-shadow: 2px 2px 0 #FFD700, 4px 4px 0 rgba(0,0,0,0.15);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* STARS behind kid title */
+  .stars {
+    position: absolute;
+    top: 20px;
+    right: 60px;
+    font-size: 20px;
+    animation: starSpin 4s linear infinite;
+  }
+  @keyframes starSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* NAV BUTTON */
+  .nav-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+    background: #FFD700;
+    color: #1a1a2e;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+
+  /* SLIDE INDICATOR */
+  .indicator {
+    position: fixed;
+    bottom: 38px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+  }
+  .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .dot.active {
+    background: #FFD700;
+  }
+
+  /* GROUND */
+  .ground {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 38%;
+    background: linear-gradient(180deg, #6bbf6b, #4a9e4a);
+    z-index: 0;
+  }
+  .ground-top {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 20px;
+    background: #7bc47a;
+    border-radius: 0 0 50% 50% / 0 0 10px 10px;
+  }
+
+  /* CLOUDS S2 */
+  .cloud-s2 {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.85;
+  }
+  .cloud-s2::before, .cloud-s2::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+  }
+  .cs1 { width: 90px; height: 32px; top: 100px; right: -110px; animation: cloudMoveR 20s linear infinite; }
+  .cs1::before { width: 45px; height: 45px; top: -22px; left: 13px; }
+  .cs1::after { width: 32px; height: 32px; top: -14px; left: 42px; }
+
+  @keyframes cloudMoveR {
+    from { right: -120px; }
+    to { right: 110%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slides">
+
+  <!-- SLIDE 1: Orang Jalan -->
+  <div class="slide" id="slide1">
+
+    <!-- Sky elements -->
+    <div class="sun"></div>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+
+    <div class="slide1-title">🚶 Orang Jalan-Jalan 🚶</div>
+
+    <!-- Trees -->
+    <div class="tree tree1">
+      <div class="tree-top"></div>
+      <div class="tree-trunk"></div>
+    </div>
+    <div class="tree tree2">
+      <div class="tree-top"></div>
+      <div class="tree-trunk"></div>
+    </div>
+    <div class="tree tree3">
+      <div class="tree-top" style="background:#388038;"></div>
+      <div class="tree-trunk"></div>
+    </div>
+
+    <!-- Grass -->
+    <div class="grass"></div>
+
+    <!-- Sidewalk -->
+    <div class="sidewalk"></div>
+
+    <!-- Road -->
+    <div class="road">
+      <div class="road-line"></div>
+      <div class="road-line"></div>
+      <div class="road-line"></div>
+      <div class="road-line"></div>
+      <div class="road-line"></div>
+    </div>
+
+    <!-- Walker 1 (front person) -->
+    <div class="walker-wrap walker1" style="z-index:10;">
+      <div class="person person1">
+        <div class="head"></div>
+        <div class="body">
+          <div class="arm-l"></div>
+          <div class="arm-r"></div>
+        </div>
+        <div class="legs">
+          <div class="leg-l"></div>
+          <div class="leg-r"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Walker 2 (behind person with HELLO) -->
+    <div class="walker-wrap walker2" style="z-index:9;">
+      <div class="hello-text">Hello! 👋</div>
+      <div class="person person2">
+        <div class="head"></div>
+        <div class="body">
+          <div class="arm-l"></div>
+          <div class="arm-r"></div>
+        </div>
+        <div class="legs">
+          <div class="leg-l"></div>
+          <div class="leg-r"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SLIDE 2: Anak Kecil -->
+  <div class="slide hidden" id="slide2">
+
+    <div class="slide2-title">🌟 Anak Kecil Gembira 🌟</div>
+    <div class="stars">⭐✨⭐</div>
+
+    <!-- Sun -->
+    <div class="sun2">
+      <div class="sun-ray" style="transform: rotate(0deg) translateX(60px);"></div>
+      <div class="sun-ray" style="transform: rotate(45deg) translateX(60px);"></div>
+      <div class="sun-ray" style="transform: rotate(90deg) translateX(60px);"></div>
+      <div class="sun-ray" style="transform: rotate(135deg) translateX(60px);"></div>
+    </div>
+
+    <!-- Cloud -->
+    <div class="cloud-s2 cs1"></div>
+
+    <!-- Butterfly -->
+    <div class="butterfly">🦋</div>
+
+    <!-- Ground -->
+    <div class="ground">
+      <div class="ground-top"></div>
+    </div>
+
+    <!-- House -->
+    <div class="house">
+      <div class="house-body">
+        <div class="house-roof"></div>
+        <div class="house-window left"></div>
+        <div class="house-window right"></div>
+        <div class="house-door"></div>
+      </div>
+    </div>
+
+    <!-- Flowers -->
+    <div class="flower f1">🌸</div>
+    <div class="flower f2">🌼</div>
+    <div class="flower f3">🌺</div>
+
+    <!-- Kid -->
+    <div class="kid-wrap">
+      <div class="balloon-wrap">
+        <div class="balloon"></div>
+      </div>
+      <div class="kid">
+        <div class="kid-head">
+          <div class="kid-hair">💇</div>
+        </div>
+        <div class="kid-body">
+          <div class="kid-arm-l"></div>
+          <div class="kid-arm-r"></div>
+        </div>
+        <div class="kid-legs">
+          <div class="kid-leg-l"></div>
+          <div class="kid-leg-r"></div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:1px;">
+          <div class="kid-shoe-l"></div>
+          <div class="kid-shoe-r"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="indicator">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+</div>
+
+<button class="nav-btn" id="navBtn" onclick="nextSlide()">Slide Berikutnya ▶</button>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  const navBtn = document.getElementById('navBtn');
+
+  function goTo(index) {
+    slides[current].classList.add('hidden');
+    dots[current].classList.remove('active');
+    current = index;
+    slides[current].classList.remove('hidden');
+    dots[current].classList.add('active');
+    navBtn.textContent = current === slides.length - 1 ? '◀ Kembali' : 'Slide Berikutnya ▶';
+  }
+
+  function nextSlide() {
+    const next = (current + 1) % slides.length;
+    goTo(next);
+  }
+</script>
+
+</body>
+</html>
