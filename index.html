@@ -296,6 +296,74 @@
     to { transform: translateX(-50%) translateY(-6px); }
   }
 
+  /* RAINBOW FART */
+  .fart-wrap {
+    position: absolute;
+    bottom: 18px;
+    left: -10px;
+    pointer-events: none;
+  }
+
+  .rainbow-arc {
+    position: absolute;
+    border-radius: 50%;
+    border: 0 solid transparent;
+    opacity: 0;
+    transform-origin: right center;
+    animation: fartShoot 1.2s ease-out infinite;
+  }
+
+  .rainbow-arc:nth-child(1) { width:70px; height:50px; border-top:7px solid #ff0000; top:-48px; left:-70px; animation-delay:0s; }
+  .rainbow-arc:nth-child(2) { width:60px; height:42px; border-top:7px solid #ff7700; top:-42px; left:-60px; animation-delay:0.04s; }
+  .rainbow-arc:nth-child(3) { width:50px; height:34px; border-top:7px solid #ffff00; top:-36px; left:-50px; animation-delay:0.08s; }
+  .rainbow-arc:nth-child(4) { width:40px; height:26px; border-top:7px solid #00cc00; top:-30px; left:-40px; animation-delay:0.12s; }
+  .rainbow-arc:nth-child(5) { width:30px; height:18px; border-top:7px solid #0066ff; top:-24px; left:-30px; animation-delay:0.16s; }
+  .rainbow-arc:nth-child(6) { width:20px; height:12px; border-top:7px solid #8800ff; top:-18px; left:-20px; animation-delay:0.20s; }
+
+  @keyframes fartShoot {
+    0%   { opacity: 0;   transform: translateX(0px) scaleX(0.3); }
+    20%  { opacity: 1;   transform: translateX(-8px) scaleX(1); }
+    70%  { opacity: 0.8; transform: translateX(-28px) scaleX(1.1); }
+    100% { opacity: 0;   transform: translateX(-50px) scaleX(1.2); }
+  }
+
+  /* Fart puff clouds */
+  .fart-puff {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    animation: puffOut 1.2s ease-out infinite;
+  }
+  .fart-puff:nth-child(7)  { width:14px;height:14px;background:radial-gradient(#ff88ff,#cc44cc); top:-30px;left:-55px;animation-delay:0.1s; }
+  .fart-puff:nth-child(8)  { width:10px;height:10px;background:radial-gradient(#88ffff,#44aacc); top:-20px;left:-65px;animation-delay:0.2s; }
+  .fart-puff:nth-child(9)  { width:12px;height:12px;background:radial-gradient(#ffff88,#cccc44); top:-38px;left:-62px;animation-delay:0.15s; }
+
+  @keyframes puffOut {
+    0%   { opacity:0; transform:scale(0.3) translate(0,0); }
+    30%  { opacity:1; }
+    100% { opacity:0; transform:scale(1.8) translate(-20px,-15px); }
+  }
+
+  /* Fart sound text */
+  .fart-sound {
+    position: absolute;
+    top: -55px;
+    left: -80px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 13px;
+    color: #8800ff;
+    white-space: nowrap;
+    opacity: 0;
+    animation: fartText 1.2s ease-out infinite;
+    text-shadow: 0 0 8px #ff00ff;
+  }
+  @keyframes fartText {
+    0%   { opacity:0; transform:translate(0,0) rotate(-15deg) scale(0.5); }
+    30%  { opacity:1; transform:translate(-10px,-5px) rotate(-10deg) scale(1.1); }
+    70%  { opacity:0.7; }
+    100% { opacity:0; transform:translate(-30px,-20px) rotate(-20deg) scale(0.8); }
+  }
+
   /* SLIDE 1 TITLE */
   .slide1-title {
     position: absolute;
@@ -716,6 +784,19 @@
           <div class="leg-l"></div>
           <div class="leg-r"></div>
         </div>
+      </div>
+      <!-- KENTUT PELANGI 🌈💨 -->
+      <div class="fart-wrap">
+        <div class="rainbow-arc"></div>
+        <div class="rainbow-arc"></div>
+        <div class="rainbow-arc"></div>
+        <div class="rainbow-arc"></div>
+        <div class="rainbow-arc"></div>
+        <div class="rainbow-arc"></div>
+        <div class="fart-puff"></div>
+        <div class="fart-puff"></div>
+        <div class="fart-puff"></div>
+        <div class="fart-sound">💨 PROOOOT!</div>
       </div>
     </div>
 
